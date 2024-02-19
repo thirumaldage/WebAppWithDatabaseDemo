@@ -7,7 +7,7 @@ variables:
   BuildConfiguration: release
   
 stages:
-- stage: Stage_Build_WebApp
+- stage: Build_Stage
   jobs:
   - job: Build_Job
     displayName: Build WebApp
@@ -57,7 +57,7 @@ stages:
           PathtoPublish: '$(build.artifactstagingdirectory)'
 - stage: 
   displayName: Depoy_stage
-  dependsOn: Stage_Build_WebApp
+  dependsOn: Build_Stage
   jobs:
   - job: Deploy_Job
     displayName: DeployDisplayName
