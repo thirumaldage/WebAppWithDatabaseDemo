@@ -7,7 +7,7 @@ variables:
   BuildConfiguration: release
   
 stages:
-  - stage: Build WebApp
+  - stage: StageBuildWebApp
     jobs:
     - job: BuildWebApp
       displayName: Build WebApp
