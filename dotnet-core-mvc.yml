@@ -77,10 +77,21 @@ stages:
      name: Hosted Windows 2019 with VS2019 
      vmImage: 'windows-2019'
     steps:
+
+    - task: DownloadBuildArtifacts@1
+      displayName: Download WebApp.zip
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        itemPattern: '**/WebApp.zip'
+        downloadPath: '$(System.DefaultWorkingDirectory)'
     - task: AzureRmWebAppDeployment@4
+      displayName: Deploy Web App
       inputs:
         ConnectionType: 'AzureRM'
         azureSubscription: 'AzureServiceprinicipalConnection'
         appType: 'webApp'
         WebAppName: 'dotnet-core-mvc1'
         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        JSONFiles: '**/appsettings.json'
