@@ -9,7 +9,7 @@ variables:
 stages:
   - stage: StageBuildWebApp
     jobs:
-    - job: BuildWebApp
+    - job: BuildJob
       displayName: Build WebApp
       pool:
        name: Hosted Windows 2019 with VS2019 
