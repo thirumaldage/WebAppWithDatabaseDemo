@@ -6,43 +6,52 @@ pool:
 variables:
   BuildConfiguration: release
   
-steps:
+stages:
+  - stage: Build WebApp
+    jobs:
+    - job: BuildWebApp
+      displayName: Build WebApp
+      pool:
+       name: Hosted Windows 2019 with VS2019 
+       vmImage: 'windows-2019'
+      variables:
+       BuildConfiguration: release
+      steps:
+        - task: UseDotNet@2
+          displayName: Install .NET 6 sdk
+          inputs:
+            packageType: sdk
+            version: 6.0.x
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+    
+        - task: DotNetCoreCLI@2
+          displayName: Restore Nuget Packages
+          inputs:
+            command: restore
+            projects: '**/WebApp.csproj'
 
-- task: UseDotNet@2
-  displayName: Install .NET 6 sdk
-  inputs:
-    packageType: sdk
-    version: 6.0.x
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+        - task: DotNetCoreCLI@2
+          displayName: Build Web App
+          inputs:
+            projects: '**/WebApp.csproj'
+            arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Restore Nuget Packages
-  inputs:
-    command: restore
-    projects: '**/WebApp.csproj'
+        - task: DotNetCoreCLI@2
+          displayName: Run Unit Tests
+          inputs:
+            command: test
+            projects: '**/*UnitTest*.csproj'
+            arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Build Web App
-  inputs:
-    projects: '**/WebApp.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
+        - task: DotNetCoreCLI@2
+          displayName: Create Web App Package (.zip)
+          inputs:
+            command: publish
+            publishWebProjects: True
+            arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+            zipAfterPublish: True
 
-- task: DotNetCoreCLI@2
-  displayName: Run Unit Tests
-  inputs:
-    command: test
-    projects: '**/*UnitTest*.csproj'
-    arguments: '--configuration $(BuildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Create Web App Package (.zip)
-  inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
-    zipAfterPublish: True
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact (WebApp.zip)'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Artifact (WebApp.zip)'
+          inputs:
+            PathtoPublish: '$(build.artifactstagingdirectory)'
