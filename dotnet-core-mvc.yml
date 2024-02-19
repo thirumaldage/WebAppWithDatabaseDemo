@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: ubuntu-latest
+  vmImage: ubuntu-latest
 
 variables:
   RestoreBuildProjects: '**/*.csproj,!**/*SeleniumUiTests.csproj'
