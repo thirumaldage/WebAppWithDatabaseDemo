@@ -7,11 +7,10 @@ trigger:
 - master
 
 pool:
-  name: Azure Pipelines
+  name: ubuntu-latest
 
 variables:
-  RestoreBuildProjects: '**/*.csproj
-!**/*SeleniumUiTests.csproj'
+  RestoreBuildProjects: '**/*.csproj,!**/*SeleniumUiTests.csproj'
 
 steps:
 - task: DotNetCoreCLI@2
