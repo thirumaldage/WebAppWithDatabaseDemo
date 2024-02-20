@@ -5,6 +5,12 @@ pool:
     
 variables:
   BuildConfiguration: release
+
+parameters:
+- name: WebAppName
+  displayName: Web App Name
+  type: string
+  default: ''
   
 stages:
 - stage: Build_Stage
@@ -92,6 +98,6 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: 'AzureServiceprinicipalConnection'
         appType: 'webApp'
-        WebAppName: 'dotnet-core-mvc1'
+        WebAppName: ${{ parameters.WebAppName }}
         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
         JSONFiles: '**/appsettings.json'
