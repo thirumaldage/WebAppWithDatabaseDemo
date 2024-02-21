@@ -102,6 +102,7 @@ stages:
         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
         JSONFiles: '**/appsettings.json'
 - stage: SeleniumTest
+  dependsOn: []
   jobs:
   - job: Selenium
     displayName: 'Build UI Tests'
