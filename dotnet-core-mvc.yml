@@ -101,7 +101,7 @@ stages:
         WebAppName: ${{ parameters.WebAppName }}
         packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
         JSONFiles: '**/appsettings.json'
-- stage: 
+- stage: SeleniumTest
   jobs:
   - job: Selenium
     displayName: 'Build UI Tests'
